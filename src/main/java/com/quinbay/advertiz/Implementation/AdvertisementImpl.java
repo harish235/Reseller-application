@@ -1,8 +1,8 @@
-package com.quinbay.advertiz.service;
+package com.quinbay.advertiz.Implementation;
 
 
 import com.quinbay.advertiz.Repositories.*;
-import com.quinbay.advertiz.functions.AdvertisementInterface;
+import com.quinbay.advertiz.Service.AdvertisementService;
 import com.quinbay.advertiz.model.*;
 import com.quinbay.advertiz.pojo.Adpost;
 import com.quinbay.advertiz.pojo.AdvertisementRequest;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdvertisementService implements AdvertisementInterface {
+public class AdvertisementImpl implements AdvertisementService {
 
     @Autowired
     AdvertisementRepository advertisementRepository;

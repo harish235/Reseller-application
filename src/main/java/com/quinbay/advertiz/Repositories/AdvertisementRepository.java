@@ -11,20 +11,20 @@ import java.util.Optional;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Integer> {
 
-    List<Advertisement> findBySubcategoryidAndStatus(int sid, boolean b);
+    List<Advertisement> findBySubcategoryidAndStatus(int sid, boolean status);
 
-    List<Advertisement> findByCategoryidAndStatus(int cid, boolean b);
+    List<Advertisement> findByCategoryidAndStatus(int cid, boolean status);
 
-    Optional<Advertisement> findBySelleridAndAdidAndStatus(int sId, int adId, boolean b);
+    Optional<Advertisement> findBySelleridAndAdidAndStatus(int sId, int adId, boolean status);
 
     Optional<Advertisement> findByAdidAndSellerid(int adid, int sellerid);
 
-    List<Advertisement> findByStatus(boolean b);
+    List<Advertisement> findByStatus(boolean status);
 
-    Optional<Advertisement> findByAdidAndStatus(int adid, boolean b);
+    Optional<Advertisement> findByAdidAndStatus(int adid, boolean status);
 
     List<Advertisement> findBySellerid(int userid);
 
-    List<Advertisement> findBySelleridAndStatus(int sellerid, boolean b);
+    List<Advertisement> findBySelleridAndStatus(int sellerid, boolean status);
 }
 

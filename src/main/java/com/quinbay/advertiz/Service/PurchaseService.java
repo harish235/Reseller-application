@@ -1,4 +1,4 @@
-package com.quinbay.advertiz.functions;
+package com.quinbay.advertiz.Service;
 
 import com.quinbay.advertiz.model.Purchase;
 import com.quinbay.advertiz.model.Quotehistory;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface PurchaseInterface {
+public interface PurchaseService {
 
     ResponseEntity purchaseItem(int adId, int buyerId);
     ResponseEntity quoteAmountForAdvertisement(int adId, int buyerId, int quotePrice);

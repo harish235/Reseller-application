@@ -1,11 +1,11 @@
-package com.quinbay.advertiz.service;
+package com.quinbay.advertiz.Implementation;
 
 import java.time.LocalDateTime;
 import com.quinbay.advertiz.Repositories.AdvertisementRepository;
 import com.quinbay.advertiz.Repositories.PurchaseRepository;
 import com.quinbay.advertiz.Repositories.QuotehistoryRepository;
 import com.quinbay.advertiz.Repositories.UserRepository;
-import com.quinbay.advertiz.functions.PurchaseInterface;
+import com.quinbay.advertiz.Service.PurchaseService;
 import com.quinbay.advertiz.model.Advertisement;
 import com.quinbay.advertiz.model.Purchase;
 import com.quinbay.advertiz.model.Quotehistory;
@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.*;
 
 @Service
-public class PurchaseService implements PurchaseInterface {
+public class PurchaseImpl implements PurchaseService {
 
 
     @Bean

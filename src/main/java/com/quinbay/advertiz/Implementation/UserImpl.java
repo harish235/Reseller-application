@@ -1,7 +1,7 @@
-package com.quinbay.advertiz.service;
+package com.quinbay.advertiz.Implementation;
 
 import com.quinbay.advertiz.Repositories.UserRepository;
-import com.quinbay.advertiz.functions.UserInterface;
+import com.quinbay.advertiz.Service.UserService;
 import com.quinbay.advertiz.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class UserService implements UserInterface {
+public class UserImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;

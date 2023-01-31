@@ -1,4 +1,4 @@
-package com.quinbay.advertiz.functions;
+package com.quinbay.advertiz.Service;
 
 import com.quinbay.advertiz.model.Advertisement;
 import com.quinbay.advertiz.pojo.Adpost;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface AdvertisementInterface {
+public interface AdvertisementService {
 
     List<Advertisement> getAllAds();
     Optional<Advertisement> getAdById(int id);
@@ -37,6 +37,4 @@ public interface AdvertisementInterface {
     int getTotalViews(int adid);
 
     List<Advertisement> getAdsOfUser(int userid);
-
-//    ResponseEntity updateAdvertisement(int userId, int adId);
 }

@@ -17,9 +17,9 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
     Optional<Purchase> findByAdvertisementid(int adid);
 
-    Optional<Purchase> findByAdvertisementidAndSellleridAndStatus(int adid, int sellerid, boolean b);
+    Optional<Purchase> findByAdvertisementidAndSellleridAndStatus(int adid, int sellerid, boolean status);
 
-    Optional<Purchase> findByAdvertisementidAndStatus(int adid, boolean b);
+    Optional<Purchase> findByAdvertisementidAndStatus(int adid, boolean status);
 
-    List<Purchase> findByBuyeridAndStatus(int buyerid, boolean b);
+    List<Purchase> findByBuyeridAndStatus(int buyerid, boolean status);
 }

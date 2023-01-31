@@ -1,8 +1,8 @@
-package com.quinbay.advertiz.service;
+package com.quinbay.advertiz.Implementation;
 
 import com.quinbay.advertiz.Repositories.CategoryRepository;
 import com.quinbay.advertiz.Repositories.SubcategoryRepository;
-import com.quinbay.advertiz.functions.CategoryInterface;
+import com.quinbay.advertiz.Service.CategoryService;
 import com.quinbay.advertiz.model.Category;
 import com.quinbay.advertiz.model.CategoryResponse;
 import com.quinbay.advertiz.model.Subcategory;
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @Service
-public class CategoryService implements CategoryInterface {
+public class CategoryImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 

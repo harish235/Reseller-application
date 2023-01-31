@@ -20,16 +20,16 @@ public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="adid")
-    int adid;
+    Integer adid;
 
     @Column(name = "sellerid")
-    int sellerid;
+    Integer sellerid;
 
     @Column(name= "subcategoryid")
-    int subcategoryid;
+    Integer subcategoryid;
 
     @Column(name = "categoryid")
-    int categoryid;
+    Integer categoryid;
 
     @Column(name = "title")
     String title;
@@ -53,4 +53,7 @@ public class Advertisement {
 
     @Column(name = "viewcount")
     int viewcount;
+
+    @Column(name = "imagepath")
+    String imgpath;
 }

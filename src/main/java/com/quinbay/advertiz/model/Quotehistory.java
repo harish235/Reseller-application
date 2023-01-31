@@ -21,16 +21,16 @@ public class Quotehistory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="qid")
-    int qid;
+    Integer qid;
 
     @Column(name = "advertisementid")
-    int advertisementid;
+    Integer advertisementid;
 
     @Column(name= "buyerid")
-    int buyerid;
+    Integer buyerid;
 
     @Column(name = "sellerid")
-    int selllerid;
+    Integer selllerid;
 
     @Column(name = "price")
     int price;

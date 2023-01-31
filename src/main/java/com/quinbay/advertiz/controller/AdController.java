@@ -1,6 +1,8 @@
 package com.quinbay.advertiz.controller;
 
 
+import com.quinbay.advertiz.Repositories.CategoryRepository;
+import com.quinbay.advertiz.Repositories.SubcategoryRepository;
 import com.quinbay.advertiz.functions.AdvertisementInterface;
 import com.quinbay.advertiz.functions.CategoryInterface;
 import com.quinbay.advertiz.model.Advertisement;
@@ -8,6 +10,9 @@ import com.quinbay.advertiz.model.Category;
 import com.quinbay.advertiz.model.CategoryResponse;
 import com.quinbay.advertiz.model.Subcategory;
 import com.quinbay.advertiz.pojo.Adpost;
+import com.quinbay.advertiz.pojo.AdvertisementRequest;
+import com.quinbay.advertiz.pojo.CategoryRequest;
+import com.quinbay.advertiz.pojo.PurchasedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +29,16 @@ public class AdController {
 
     @Autowired
     AdvertisementInterface advertisementInterface;
+
+    @PostMapping("/loadCategories")
+    public Category loadCategories(@RequestBody CategoryRequest request){
+        return categoryInterface.loadCategories(request);
+    }
+
+    @GetMapping("findAllCategories")
+    public List<Category> findAllCategories(){
+        return categoryInterface.findAllCategories();
+    }
 
     @GetMapping("/categories")
     public List<Category> getAllCategory(){
@@ -61,8 +76,18 @@ public class AdController {
     }
 
     @GetMapping("/pendingAdvertisements")
-    public List<Advertisement> getpendingAdvertisement(){
+    public List<AdvertisementRequest> getpendingAdvertisement(){
         return advertisementInterface.getPendingAdvertisement();
+    }
+
+    @GetMapping("/PendingAdvertisementsOfUser")
+    public List<Advertisement> getPendingAdvertisementOfUser(@RequestParam int userid){
+        return advertisementInterface.getPendingAdvertisementOfUser(userid);
+    }
+
+    @GetMapping("/SoldItemsOfUser")
+    public List<PurchasedResponse> getSoldAdsOfUser(@RequestParam int userid){
+        return advertisementInterface.getSoldAdsOfUser(userid);
     }
 
     @PutMapping("/updateMinimumPrice")
@@ -80,10 +105,10 @@ public class AdController {
         return advertisementInterface.deleteAdvertisement(sellerid, adid);
     }
 
-    @RequestMapping(path = "/{category}/{subcategory}", method = RequestMethod.GET)
-    public List<Advertisement> getAdsBySubcategory(@PathVariable("category") String categoryname, @PathVariable("subcategory") String subcategoryname) {
+    @RequestMapping(path = "/subcategory/{subcategory}", method = RequestMethod.GET)
+    public List<Advertisement> getAdsBySubcategory(@PathVariable("subcategory") String subcategoryname) {
 
-        return advertisementInterface.getAdsBySubcategory(categoryname, subcategoryname);
+        return advertisementInterface.getAdsBySubcategory(subcategoryname);
     }
 
     @RequestMapping(path = "/{category}", method = RequestMethod.GET)

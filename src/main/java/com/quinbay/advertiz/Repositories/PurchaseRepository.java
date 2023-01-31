@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
-    List<Purchase> findByStatus(boolean b);
+    List<Purchase> findByStatusAndSelllerid(boolean b, int sellerid);
 
     Optional<Purchase> findByAdvertisementidAndBuyerid(int adid, int buyerid);
 
@@ -20,4 +20,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
     Optional<Purchase> findByAdvertisementidAndSellleridAndStatus(int adid, int sellerid, boolean b);
 
     Optional<Purchase> findByAdvertisementidAndStatus(int adid, boolean b);
+
+    List<Purchase> findByBuyeridAndStatus(int buyerid, boolean b);
 }

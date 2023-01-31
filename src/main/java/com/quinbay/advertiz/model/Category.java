@@ -1,17 +1,14 @@
 package com.quinbay.advertiz.model;
 
-
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.Setter;
+//import lombok.*;
 //
 //import javax.persistence.*;
 //import java.io.Serializable;
-//import java.util.Set;
 //
 //@Entity
 //@Getter
 //@Setter
+//@NoArgsConstructor
 //@AllArgsConstructor
 //@Table(name = "category")
 //public class Category implements Serializable {
@@ -22,39 +19,30 @@ package com.quinbay.advertiz.model;
 //    @Column(unique = true)
 //    private String name;
 //
-//    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<Subcategory> subcategories;
-//
-//    public Category() {
-//    }
-//
-//    public Category(String name) {
-//        this.name = name;
-//    }
-//
-//    // getters and setters, equals(), toString() .... (omitted for brevity)
 //}
 
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
-@Entity
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "category")
+@Entity
 public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(unique = true)
-    private String name;
+    int id;
+    String name;
 
-    // getters and setters, equals(), toString() .... (omitted for brevity)
+    @OneToMany(targetEntity = Subcategory.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cs_fk", referencedColumnName = "id")
+    List<Subcategory> subcategory;
 }

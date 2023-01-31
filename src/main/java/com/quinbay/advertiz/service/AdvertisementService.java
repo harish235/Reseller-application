@@ -1,23 +1,19 @@
 package com.quinbay.advertiz.service;
 
 
-import com.quinbay.advertiz.Repositories.AdvertisementRepository;
-import com.quinbay.advertiz.Repositories.AdviewsRepository;
-import com.quinbay.advertiz.Repositories.CategoryRepository;
-import com.quinbay.advertiz.Repositories.SubcategoryRepository;
+import com.quinbay.advertiz.Repositories.*;
 import com.quinbay.advertiz.functions.AdvertisementInterface;
 import com.quinbay.advertiz.model.*;
 import com.quinbay.advertiz.pojo.Adpost;
-import org.apache.kafka.common.protocol.types.Field;
-import org.apache.kafka.common.quota.ClientQuotaAlteration;
+import com.quinbay.advertiz.pojo.AdvertisementRequest;
+import com.quinbay.advertiz.pojo.PurchasedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +24,12 @@ public class AdvertisementService implements AdvertisementInterface {
     AdvertisementRepository advertisementRepository;
 
     @Autowired
+    PurchaseRepository purchaseRepository;
+
+    @Autowired
+    QuotehistoryRepository quotehistoryRepository;
+
+    @Autowired
     SubcategoryRepository subcategoryRepository;
 
     @Autowired
@@ -36,9 +38,13 @@ public class AdvertisementService implements AdvertisementInterface {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public List<Advertisement> getAllAds(){
-        return advertisementRepository.findAll();
+        System.out.println("\n\tentering");
+        return (List<Advertisement>)advertisementRepository.findAll();
     }
 
     @Override
@@ -46,9 +52,68 @@ public class AdvertisementService implements AdvertisementInterface {
         return advertisementRepository.findById(id);
     }
 
+//    @Override
+//    public List<Advertisement> getPendingAdvertisement(){
+//        return advertisementRepository.findByStatus(false);
+//    }
+
     @Override
-    public List<Advertisement> getPendingAdvertisement(){
-        return advertisementRepository.findByStatus(false);
+    public List<AdvertisementRequest> getPendingAdvertisement(){
+        List<AdvertisementRequest> advertisementRequests = new ArrayList<>();
+        List<Advertisement> advertisementList = advertisementRepository.findByStatus(false);
+        for(Advertisement ad: advertisementList){
+            AdvertisementRequest adrequest = new AdvertisementRequest();
+            Optional<Purchase> purchase = purchaseRepository.findByAdvertisementidAndStatus(ad.getAdid(), false);
+            if(purchase.isPresent()){
+                adrequest.setTopQuotedAmount(purchase.get().getFinalprice());
+            }
+            else{
+                adrequest.setTopQuotedAmount(0);
+            }
+            adrequest.setAdid(ad.getAdid());
+            adrequest.setSellerid(ad.getSellerid());
+            adrequest.setSubcategoryid(ad.getSubcategoryid());
+            adrequest.setCategoryid(ad.getCategoryid());
+            adrequest.setTitle(ad.getTitle());
+            adrequest.setDescription(ad.getDescription());
+            adrequest.setPrice(ad.getPrice());
+            adrequest.setMinimumprice(ad.getMinimumprice());
+            adrequest.setPostedDate(ad.getPosetdDate());
+            adrequest.setStatus(ad.getStatus());
+            adrequest.setViewcount(ad.getViewcount());
+            adrequest.setImgpath(ad.getImgpath());
+
+            advertisementRequests.add(adrequest);
+        }
+        return advertisementRequests;
+    }
+
+    @Override
+    public  List<Advertisement> getPendingAdvertisementOfUser(int userid){
+        return advertisementRepository.findBySelleridAndStatus(userid, false);
+    }
+
+//    @Override
+//    public List<Advertisement> getSoldAdsOfUser(int userid){
+//        return advertisementRepository.findBySelleridAndStatus(userid, true);
+//    }
+
+    @Override
+    public List<PurchasedResponse> getSoldAdsOfUser(int userid){
+        List<PurchasedResponse> purchasedResponseList = new ArrayList<>();
+        List<Purchase> purchaseList = purchaseRepository.findByStatusAndSelllerid(true, userid);
+
+        for(Purchase purchase: purchaseList){
+            PurchasedResponse pr = new PurchasedResponse();
+            Optional<User> user = userRepository.findById(userid);
+            Optional<Advertisement> advertisement = advertisementRepository.findById(purchase.getAdvertisementid());
+            pr.setBuyerName(user.get().getUsername());
+            pr.setAdTitle(advertisement.get().getTitle());
+            pr.setFinalprice(purchase.getFinalprice());
+            pr.setDate(purchase.getDate());
+            purchasedResponseList.add(pr);
+        }
+        return purchasedResponseList;
     }
 
     @Override
@@ -86,8 +151,8 @@ public class AdvertisementService implements AdvertisementInterface {
             String subcategoryname = ad.getSubcategoryname();
             Optional<Subcategory> subcategory = subcategoryRepository.findByName(subcategoryname);
             System.out.println(subcategory.get().getName());
+
             int categoryid = subcategory.get().getCategoryid();
-//            ad.setCategoryid(categoryid);
             Advertisement newAd = new Advertisement();
             newAd.setTitle(ad.getTitle());
             newAd.setDescription(ad.getDescription());
@@ -99,6 +164,7 @@ public class AdvertisementService implements AdvertisementInterface {
             newAd.setPosetdDate(LocalDateTime.now());
             newAd.setStatus(false);
             newAd.setViewcount(0);
+            newAd.setImgpath(ad.getImgPath());
             return advertisementRepository.save(newAd);
         }
         catch(Exception e){
@@ -116,12 +182,13 @@ public class AdvertisementService implements AdvertisementInterface {
     @Override
     public List<Advertisement> getAdsByCategory(String cname){
         Optional<Category> category = categoryRepository.findByName(cname);
-        return advertisementRepository.findByCategoryid(category.get().getId());
+        return advertisementRepository.findByCategoryidAndStatus(category.get().getId(), false);
     }
 
     @Override
-    public List<Advertisement> getAdsBySubcategory(String cname, String sname){
-        return advertisementRepository.findByCategoryidAndSubcategoryid(cname, sname);
+    public List<Advertisement> getAdsBySubcategory(String sname){
+        Optional<Subcategory> subcategory = subcategoryRepository.findByName(sname);
+        return advertisementRepository.findBySubcategoryidAndStatus(subcategory.get().getId(), false);
     }
 
     @Override
@@ -137,8 +204,17 @@ public class AdvertisementService implements AdvertisementInterface {
     public ResponseEntity deleteAdvertisement(int sId, int adid){
         try {
             Optional<Advertisement> adToBeDeleted = advertisementRepository.findBySelleridAndAdidAndStatus(sId, adid, false);
-            advertisementRepository.delete(adToBeDeleted.get());
-            return new ResponseEntity("Successfully deleted",HttpStatus.OK);
+            if(adToBeDeleted.isPresent()) {
+                advertisementRepository.delete(adToBeDeleted.get());
+                Optional<Purchase> purchase = purchaseRepository.findByAdvertisementid(adToBeDeleted.get().getAdid());
+                purchaseRepository.delete(purchase.get());
+                List<Quotehistory> quotehistoryList = quotehistoryRepository.findByAdvertisementid(adToBeDeleted.get().getAdid());
+                quotehistoryRepository.deleteAll(quotehistoryList);
+                return new ResponseEntity("Successfully deleted advertisement and all its associated quotes", HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity("No such advertisement or the item may have been purchased", HttpStatus.NOT_FOUND);
+            }
         }
         catch(Exception e){
             System.out.println(e);

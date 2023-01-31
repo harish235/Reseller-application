@@ -2,6 +2,8 @@ package com.quinbay.advertiz.functions;
 
 import com.quinbay.advertiz.model.Advertisement;
 import com.quinbay.advertiz.pojo.Adpost;
+import com.quinbay.advertiz.pojo.AdvertisementRequest;
+import com.quinbay.advertiz.pojo.PurchasedResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public interface AdvertisementInterface {
 
     Advertisement postAdvertisement(Adpost ad);
 
-    List<Advertisement> getAdsBySubcategory(String cname, String sname);
+    List<Advertisement> getAdsBySubcategory(String sname);
 
     List<Advertisement> getAdsByCategory(String  cname);
 
@@ -24,7 +26,11 @@ public interface AdvertisementInterface {
 
     ResponseEntity updateMinimumPrice(int adid, int sellerId, int minPrice);
 
-    List<Advertisement> getPendingAdvertisement();
+    List<AdvertisementRequest> getPendingAdvertisement();
+
+    List<Advertisement> getPendingAdvertisementOfUser(int userid);
+
+    List<PurchasedResponse> getSoldAdsOfUser(int userid);
 
     boolean addViewCount(int adid, int userid);
 

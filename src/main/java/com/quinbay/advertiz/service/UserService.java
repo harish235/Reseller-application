@@ -23,7 +23,7 @@ public class UserService implements UserInterface {
             if(user!= null){
                 return user;
             }else{
-                return new ResponseEntity("Check your username and password",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity("Check your username and password",HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             System.out.println(e);

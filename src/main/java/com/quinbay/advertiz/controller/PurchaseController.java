@@ -3,6 +3,8 @@ package com.quinbay.advertiz.controller;
 
 import com.quinbay.advertiz.functions.PurchaseInterface;
 import com.quinbay.advertiz.model.Purchase;
+import com.quinbay.advertiz.model.Quotehistory;
+import com.quinbay.advertiz.pojo.PurchasedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +18,34 @@ public class PurchaseController {
     @Autowired
     PurchaseInterface purchaseInterface;
 
-    @GetMapping("/purchasedList")
-    public List<Purchase> getPurchasedList(){
-        return purchaseInterface.getPurchasedList();
+    @GetMapping("/getSoldListOfSeller")
+    public List<Purchase> getSoldList(@RequestParam int sellerid){
+        return purchaseInterface.getSoldListOfSeller(sellerid);
     }
 
     @GetMapping("/unApprovedQuoteList")
-    public List<Purchase> getUnApprovedQuotes(){
-        return purchaseInterface.getUnApprovedQuotes();
+    public List<Purchase> getUnApprovedQuotes(@RequestParam int sellerid){
+        return purchaseInterface.getUnApprovedQuotes(sellerid);
+    }
+
+    @GetMapping("/getPurchasedListOfBuyer")
+    public List<PurchasedResponse> getPurchasedListOfBuyer(@RequestParam int buyerid){
+        return purchaseInterface.getPurchasedListOfBuyer(buyerid);
     }
 
     @GetMapping("/getTopQuoteForAd")
     public Object getTopQuote(@RequestParam int adid){
         return purchaseInterface.getTopQuotedAmount(adid);
+    }
+
+    @GetMapping("/getTopPriorityQuotesOfBuyer")
+    public List<Purchase> getTopPriorityQuoteOfBuyer(@RequestParam int buyerid){
+        return purchaseInterface.getTopPriorityQuoteOfBuyer(buyerid);
+    }
+
+    @GetMapping("/getLeastPriorityQuotesOfBuyer")
+    public List<Quotehistory> getLeastPriorityQuotesOfBuyer(@RequestParam int buyerid){
+        return purchaseInterface.getLeastPriorityQuotesOfBuyer(buyerid);
     }
 
     @PostMapping("/purchase")

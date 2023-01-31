@@ -22,16 +22,16 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="pid")
-    int pid;
+    Integer pid;
 
     @Column(name = "advertisementid")
-    int advertisementid;
+    Integer advertisementid;
 
     @Column(name= "buyerid")
-    int buyerid;
+    Integer buyerid;
 
     @Column(name = "sellerid")
-    int selllerid;
+    Integer selllerid;
 
     @Column(name = "finalprice")
     int finalprice;

@@ -1,39 +1,33 @@
 package com.quinbay.advertiz;
 
-import com.quinbay.advertiz.Repositories.CategoryRepository;
-import com.quinbay.advertiz.Repositories.SubcategoryRepository;
-import com.quinbay.advertiz.model.Category;
-import com.quinbay.advertiz.model.Subcategory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
 
 
 @SpringBootApplication
+@EnableCaching
 public class AdvertizApplication {
-
+	@Bean
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory);
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		return redisTemplate;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdvertizApplication.class, args);
 
 	}
-
-//	@Bean
-//	public CommandLineRunner mappingDemo(CategoryRepository categoryRepository,
-//										 SubcategoryRepository subcategoryRepository) {
-//		return args -> {
-//
-//			// create a new book
-//			Category category = new Category("Phone");
-//
-//			// save the book
-//			categoryRepository.save(category);
-//
-//			// create and save new pages
-//			subcategoryRepository.save(new Subcategory("Oneplus", category));
-//			subcategoryRepository.save(new Subcategory("Apple", category));
-//			subcategoryRepository.save(new Subcategory("Samsung", category));
-//		};
-//	}
 }
